@@ -68,7 +68,10 @@ def info_loop_ram(p_list, images, existing_names):
 
         # Estrarre solo la parte numerica della velocità di memoria
         speed_info = specs.get('Speed', '').strip()
-        speed = ''.join(filter(str.isdigit, speed_info)) if speed_info else "N/A"
+        # Estrai solo le cifre da speed_info
+        speed_info_numeric = ''.join(filter(str.isdigit, speed_info))
+        # Prendi le cifre dalla seconda alla quinta
+        speed = int(speed_info_numeric[1:5]) if len(speed_info_numeric) >= 5 else "N/A"
 
         # Costruzione del dizionario di informazioni per la RAM
         ram_entry = {
@@ -86,16 +89,16 @@ def info_loop_ram(p_list, images, existing_names):
 
     return ram_data
 
-# Caricamento degli URL e delle immagini dal file CSV
+print("Caricamento degli URL e delle immagini dal file CSV")
 dati_ram, images = carica_dati_ram('../src/data/Memory.csv')
 
-# Creazione della lista di oggetti Part
+print("Creazione della lista di oggetti Part")
 ram_parts_list = [Part(url) for url in dati_ram]
 
 # Percorso del file di esportazione
 export_path = '../export/RAMs.csv'
 
-# Carica i nomi esistenti dal file di esportazione
+print("Carica i nomi esistenti dal file di esportazione")
 existing_names = set()
 if os.path.exists(export_path):
     with open(export_path, mode='r', encoding='utf-8') as file:
